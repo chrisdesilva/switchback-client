@@ -52,7 +52,7 @@ const Login = (props) => {
             ...formState,
             loading: false,
           });
-          window.location.href = "/";
+          window.location.href = "/events";
         })
         .catch((err) => {
           console.error(err);
@@ -71,7 +71,7 @@ const Login = (props) => {
             ...formState,
             loading: false,
           });
-          window.location.href = "/";
+          window.location.href = "/events";
         })
         .catch((err) => {
           console.error(err);
@@ -91,9 +91,9 @@ const Login = (props) => {
   ) : (
     <AnimatePresence>
       <LoginForm
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0, scale: 0, x: -200 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        exit={{ opacity: 0, scale: 0, x: 200 }}
         onSubmit={handleSubmit}
       >
         <img src="./sb-lightgreen.png" alt="Switchback logo" />
@@ -128,9 +128,9 @@ const Login = (props) => {
   ) : (
     <AnimatePresence>
       <SignupForm
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0, scale: 0, x: 200 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        exit={{ opacity: 0, scale: 0, x: -200 }}
         onSubmit={handleSubmit}
       >
         <img src="./sb-darkgreen.png" alt="Switchback logo" />
@@ -141,6 +141,7 @@ const Login = (props) => {
           id="email"
           placeholder="Enter email"
           type="email"
+          className="input"
         />
         {errors.email && <p>{errors.email}</p>}
         <input
@@ -150,6 +151,7 @@ const Login = (props) => {
           id="password"
           placeholder="Enter password"
           type="password"
+          className="input"
         />
         {errors.general && <p>{errors.general}</p>}
         <input
@@ -159,6 +161,7 @@ const Login = (props) => {
           id="confirmPassword"
           placeholder="Confirm password"
           type="password"
+          className="input"
         />
         {errors.general && <p>{errors.general}</p>}
         <input
@@ -168,6 +171,7 @@ const Login = (props) => {
           id="handle"
           placeholder="Enter handle"
           type="text"
+          className="input"
         />
         <input
           onChange={handleChange}
@@ -176,6 +180,7 @@ const Login = (props) => {
           id="zipCode"
           placeholder="Enter zip code"
           type="text"
+          className="input"
         />
         <input type="submit" value="Sign Up" className="btn btn--primary" />
         <p onClick={() => setSignup(false)}>
@@ -195,14 +200,13 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
   background: transparent;
 `;
 
 const Form = css`
-  margin: 1rem auto;
+  margin: 2rem auto;
   padding: 2rem;
-  width: 50%;
+  width: 60%;
   border-radius: 5px;
   box-shadow: 2px 2px 10px #000;
 
@@ -218,12 +222,13 @@ const Form = css`
 
   input:not(.btn) {
     margin: 1rem auto 0 auto;
-    width: 20rem;
+    width: 90%;
+    max-width: 20rem;
     display: block;
   }
 
   img {
-    width: 20%;
+    width: 25%;
     margin: 0 auto;
     display: block;
   }
@@ -262,5 +267,22 @@ const SignupForm = styled(motion.form)`
 
   h2 {
     color: #052524;
+  }
+
+  .input {
+    color: #052524;
+    border-bottom: 2px solid #052524;
+  }
+
+  .btn {
+    background: #30da8a;
+    color: #111;
+    border: 2px solid #052524;
+    transition: color 300ms, background 300ms;
+
+    :hover {
+      background: #111;
+      color: #30da8a;
+    }
   }
 `;

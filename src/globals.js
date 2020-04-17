@@ -10,6 +10,10 @@ body {
     font-family: "PT Sans", sans-serif;
   }
 
+  button {
+    font-family: "PT Sans", sans-serif;
+  }
+
   input[type="text"],
   input[type="email"],
   input[type="password"] {

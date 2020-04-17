@@ -13,14 +13,19 @@ const Navbar = ({ authenticated }) => {
       <Nav>
         {authenticated ? (
           <>
-            <Link to="/">Home</Link>
+            <Link to="/">
+              {" "}
+              <img src="./mtn-white.png" alt="Switchback logo" />
+            </Link>
             <button className="navButton" onClick={handleSignout}>
               Sign Out
             </button>
           </>
         ) : (
           <>
-            <Link to="/">Home</Link>
+            <Link to="/">
+              <img src="./mtn-white.png" alt="Switchback logo" />
+            </Link>
             <Link to="login">Login/Signup</Link>
           </>
         )}
@@ -41,9 +46,13 @@ const Nav = styled.nav`
   top: 0;
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   background: rgba(0, 0, 0, 0.98);
   padding: 1rem 0;
+
+  img {
+    height: 2rem;
+  }
 
   a,
   .navButton {
@@ -57,5 +66,7 @@ const Nav = styled.nav`
     margin: 0 1rem;
     font-weight: bold;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
   }
 `;

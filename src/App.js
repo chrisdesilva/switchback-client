@@ -3,7 +3,7 @@ import "./App.css";
 import styled from "styled-components";
 import { GlobalStyle } from "./globals";
 import jwtDecode from "jwt-decode";
-import home from "./pages/home";
+import events from "./pages/events";
 import login from "./pages/login";
 import signup from "./pages/signup";
 import Navbar from "./components/Navbar";
@@ -37,7 +37,8 @@ function App() {
         <Navbar authenticated={authenticated} />
         <ChildContainer>
           <Switch>
-            <Route exact path="/" component={home} />
+            <Route exact path="/" component={login} />
+            <Route path="/events" component={events} />
             <AuthRoute
               exact
               path="/login"
@@ -60,7 +61,7 @@ const ParentContainer = styled.div`
 
 const ChildContainer = styled.div`
   max-width: 1200px;
-  margin: 53px auto 0 auto;
+  margin: 52px auto 0 auto;
   background: #30da8a;
   min-height: 100vh;
 `;

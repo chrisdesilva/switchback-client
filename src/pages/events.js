@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Home = () => {
+const Events = () => {
   const [events, setEvents] = useState(null);
 
   useEffect(() => {
@@ -28,15 +28,15 @@ const Home = () => {
   return (
     <Container>
       <img src="./sb-color.png" alt="Switchback logo" />
-      <Events>
-        <h2>Upcoming Events</h2>
+      <EventList>
+        <h2>Upcoming Event</h2>
         {eventsMarkup}
-      </Events>
+      </EventList>
     </Container>
   );
 };
 
-export default Home;
+export default Events;
 
 const Container = styled.div`
   background: #052524;
@@ -58,7 +58,7 @@ const Container = styled.div`
   }
 `;
 
-const Events = styled.div`
+const EventList = styled.div`
   display: flex;
   flex-direction: column;
 `;
