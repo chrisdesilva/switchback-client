@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Loading from "../components/Loading";
 
 const Events = () => {
   const [events, setEvents] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/events")
       .then((response) => {
         setEvents(response.data);
+        setLoading(false);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -22,7 +25,7 @@ const Events = () => {
       </Link>
     ))
   ) : (
-    <p>Loading...</p>
+    <Loading loading={loading} size={50} color={"#f7f7f7"} />
   );
 
   return (

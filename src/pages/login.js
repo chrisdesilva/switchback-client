@@ -9,8 +9,9 @@ const Login = (props) => {
     email: "",
     password: "",
     confirmPassword: "",
-    handle: "",
+    username: "",
     loading: false,
+    zipCode: "",
     errors: {},
   });
 
@@ -34,7 +35,7 @@ const Login = (props) => {
         email: formState.email,
         password: formState.password,
         confirmPassword: formState.confirmPassword,
-        handle: formState.handle,
+        username: formState.username,
         zipCode: formState.zipCode,
       };
     } else {
@@ -47,7 +48,7 @@ const Login = (props) => {
       axios
         .post("/signup", userData)
         .then((res) => {
-          localStorage.setItem("FBIdToken", `Bearer ${res.data.token}`);
+          localStorage.setItem("Token", `Bearer ${res.data.token}`);
           setFormState({
             ...formState,
             loading: false,
@@ -55,7 +56,7 @@ const Login = (props) => {
           window.location.href = "/events";
         })
         .catch((err) => {
-          console.error(err);
+          console.error(err.response.data);
           setFormState({
             ...formState,
             errors: err.response.data,
@@ -66,7 +67,7 @@ const Login = (props) => {
       axios
         .post("/login", userData)
         .then((res) => {
-          localStorage.setItem("FBIdToken", `Bearer ${res.data.token}`);
+          localStorage.setItem("Token", `Bearer ${res.data.token}`);
           setFormState({
             ...formState,
             loading: false,
@@ -91,9 +92,9 @@ const Login = (props) => {
   ) : (
     <AnimatePresence>
       <LoginForm
-        initial={{ opacity: 0, scale: 0, x: -200 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        exit={{ opacity: 0, scale: 0, x: 200 }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0 }}
         onSubmit={handleSubmit}
       >
         <img src="./sb-lightgreen.png" alt="Switchback logo" />
@@ -105,7 +106,6 @@ const Login = (props) => {
           placeholder="Enter email"
           type="email"
         />
-        {errors.email && <p>{errors.email}</p>}
         <input
           onChange={handleChange}
           value={formState.password}
@@ -128,9 +128,9 @@ const Login = (props) => {
   ) : (
     <AnimatePresence>
       <SignupForm
-        initial={{ opacity: 0, scale: 0, x: 200 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        exit={{ opacity: 0, scale: 0, x: -200 }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0 }}
         onSubmit={handleSubmit}
       >
         <img src="./sb-darkgreen.png" alt="Switchback logo" />
@@ -153,7 +153,7 @@ const Login = (props) => {
           type="password"
           className="input"
         />
-        {errors.general && <p>{errors.general}</p>}
+        {errors.password && <p>{errors.password}</p>}
         <input
           onChange={handleChange}
           value={formState.confirmPassword}
@@ -163,16 +163,17 @@ const Login = (props) => {
           type="password"
           className="input"
         />
-        {errors.general && <p>{errors.general}</p>}
+        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <input
           onChange={handleChange}
-          value={formState.handle}
-          name="handle"
-          id="handle"
-          placeholder="Enter handle"
+          value={formState.username}
+          name="username"
+          id="username"
+          placeholder="Enter username"
           type="text"
           className="input"
         />
+        {errors.username && <p>{errors.username}</p>}
         <input
           onChange={handleChange}
           value={formState.zipCode}
@@ -182,6 +183,7 @@ const Login = (props) => {
           type="text"
           className="input"
         />
+        {errors.zipCode && <p>{errors.zipCode}</p>}
         <input type="submit" value="Sign Up" className="btn btn--primary" />
         <p onClick={() => setSignup(false)}>
           Already have an account? Click here to sign in.

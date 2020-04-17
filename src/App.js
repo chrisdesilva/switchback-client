@@ -16,7 +16,7 @@ axios.defaults.baseURL =
   "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
 
 let authenticated;
-const token = localStorage.FBIdToken;
+const token = localStorage.Token;
 if (token) {
   const decodedToken = jwtDecode(token);
   if (decodedToken.exp * 1000 < Date.now()) {
