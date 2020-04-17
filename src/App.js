@@ -10,6 +10,10 @@ import Navbar from "./components/Navbar";
 import eventDetails from "./pages/eventDetails";
 import AuthRoute from "./components/AuthRoute";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import axios from "axios";
+
+axios.defaults.baseURL =
+  "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
 
 let authenticated;
 const token = localStorage.FBIdToken;
@@ -20,6 +24,7 @@ if (token) {
     authenticated = false;
     localStorage.clear();
   } else {
+    axios.defaults.headers.common["Authorization"] = token;
     authenticated = true;
   }
 }
