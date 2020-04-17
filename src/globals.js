@@ -7,6 +7,7 @@ body {
   a {
     text-decoration: none;
     color: #41d18a;
+    font-family: "PT Sans", sans-serif;
   }
 
   input[type="text"],
