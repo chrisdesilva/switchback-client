@@ -3,22 +3,22 @@ import "./App.css";
 import styled from "styled-components";
 import { GlobalStyle } from "./globals";
 import jwtDecode from "jwt-decode";
-import events from "./pages/events";
+import Events from "./pages/events";
 import login from "./pages/login";
-import signup from "./pages/signup";
 import Navbar from "./components/Navbar";
-import eventDetails from "./pages/eventDetails";
+import EventDetails from "./pages/eventDetails";
 import AuthRoute from "./components/AuthRoute";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 
+let authenticated;
+const token = localStorage.Token;
 axios.defaults.baseURL =
   "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
 
-let authenticated;
-const token = localStorage.Token;
 if (token) {
   const decodedToken = jwtDecode(token);
+  console.log(decodedToken);
   if (decodedToken.exp * 1000 < Date.now()) {
     window.location.href = "/login";
     authenticated = false;
@@ -38,14 +38,28 @@ function App() {
         <ChildContainer>
           <Switch>
             <Route exact path="/" component={login} />
-            <Route path="/events" component={events} />
+            <Route
+              path="/events"
+              render={(props) => (
+                <Events
+                  {...props}
+                  authenticated={authenticated}
+                  token={token}
+                />
+              )}
+            />
             <AuthRoute
               exact
               path="/login"
               component={login}
               authenticated={authenticated}
             />
-            <Route path="/event/:eventId" component={eventDetails} />
+            <Route
+              path="/event/:eventId"
+              render={(props) => (
+                <EventDetails {...props} authenticated={authenticated} />
+              )}
+            />
           </Switch>
         </ChildContainer>
       </Router>

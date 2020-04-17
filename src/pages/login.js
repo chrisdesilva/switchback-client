@@ -68,6 +68,7 @@ const Login = (props) => {
         .post("/login", userData)
         .then((res) => {
           localStorage.setItem("Token", `Bearer ${res.data.token}`);
+          console.log(res.data);
           setFormState({
             ...formState,
             loading: false,

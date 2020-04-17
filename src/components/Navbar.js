@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Navbar = ({ authenticated }) => {
   const handleSignout = () => {
-    localStorage.clear();
+    localStorage.removeItem("Token");
     window.location.href = "/";
   };
 
@@ -17,16 +17,22 @@ const Navbar = ({ authenticated }) => {
               {" "}
               <img src="./mtn-white.png" alt="Switchback logo" />
             </Link>
-            <button className="navButton" onClick={handleSignout}>
-              Sign Out
-            </button>
+            <div>
+              <Link to="/events">Events</Link>
+              <button className="navButton" onClick={handleSignout}>
+                Sign Out
+              </button>
+            </div>
           </>
         ) : (
           <>
             <Link to="/">
               <img src="./mtn-white.png" alt="Switchback logo" />
             </Link>
-            <Link to="login">Login/Signup</Link>
+            <div>
+              <Link to="/events">Events</Link>
+              <Link to="login">Login/Signup</Link>
+            </div>
           </>
         )}
       </Nav>
@@ -68,5 +74,8 @@ const Nav = styled.nav`
     text-transform: uppercase;
     display: flex;
     align-items: center;
+  }
+  div {
+    display: flex;
   }
 `;
