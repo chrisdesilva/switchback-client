@@ -22,7 +22,7 @@ const Login = (props) => {
     });
   };
 
-  const handleSubmitLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setFormState({
       ...formState,
@@ -94,7 +94,7 @@ const Login = (props) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        onSubmit={handleSubmitLogin}
+        onSubmit={handleSubmit}
       >
         <img src="./sb-lightgreen.png" alt="Switchback logo" />
         <input
@@ -131,7 +131,7 @@ const Login = (props) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        onSubmit={handleSubmitLogin}
+        onSubmit={handleSubmit}
       >
         <img src="./sb-darkgreen.png" alt="Switchback logo" />
         <input
@@ -234,7 +234,7 @@ const Form = css`
   }
 `;
 
-const LoginForm = styled(motion.div)`
+const LoginForm = styled(motion.form)`
   ${Form}
   background: #052524;
 
@@ -247,7 +247,7 @@ const LoginForm = styled(motion.div)`
   }
 `;
 
-const SignupForm = styled(motion.div)`
+const SignupForm = styled(motion.form)`
   ${Form}
   img {
     width: 20%;
