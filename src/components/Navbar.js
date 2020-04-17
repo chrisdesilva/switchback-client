@@ -13,7 +13,7 @@ const Navbar = ({ authenticated }) => {
       <Nav>
         {authenticated ? (
           <>
-            <Link to="/">
+            <Link to="/events">
               {" "}
               <img src="./mtn-white.png" alt="Switchback logo" />
             </Link>
@@ -31,7 +31,7 @@ const Navbar = ({ authenticated }) => {
             </Link>
             <div>
               <Link to="/events">Events</Link>
-              <Link to="login">Login/Signup</Link>
+              <Link to="/">Login/Signup</Link>
             </div>
           </>
         )}

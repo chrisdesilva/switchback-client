@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled, { css } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Login = (props) => {
+const Login = ({ authenticated }) => {
   const [signup, setSignup] = useState(true);
   const [formState, setFormState] = useState({
     email: "",
@@ -85,6 +85,10 @@ const Login = (props) => {
         });
     }
   };
+
+  useEffect(() => {
+    return authenticated ? (window.location.href = "/events") : null;
+  }, [authenticated]);
 
   const { errors, loading } = formState;
 

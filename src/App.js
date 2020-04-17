@@ -4,10 +4,9 @@ import styled from "styled-components";
 import { GlobalStyle } from "./globals";
 import jwtDecode from "jwt-decode";
 import Events from "./pages/events";
-import login from "./pages/login";
+import Login from "./pages/login";
 import Navbar from "./components/Navbar";
 import EventDetails from "./pages/eventDetails";
-import AuthRoute from "./components/AuthRoute";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 
@@ -18,7 +17,6 @@ axios.defaults.baseURL =
 
 if (token) {
   const decodedToken = jwtDecode(token);
-  console.log(decodedToken);
   if (decodedToken.exp * 1000 < Date.now()) {
     window.location.href = "/login";
     authenticated = false;
@@ -37,7 +35,13 @@ function App() {
         <Navbar authenticated={authenticated} />
         <ChildContainer>
           <Switch>
-            <Route exact path="/" component={login} />
+            <Route
+              exact
+              path="/"
+              render={(props) => (
+                <Login {...props} authenticated={authenticated} />
+              )}
+            />
             <Route
               path="/events"
               render={(props) => (
@@ -48,16 +52,14 @@ function App() {
                 />
               )}
             />
-            <AuthRoute
-              exact
-              path="/login"
-              component={login}
-              authenticated={authenticated}
-            />
             <Route
               path="/event/:eventId"
               render={(props) => (
-                <EventDetails {...props} authenticated={authenticated} />
+                <EventDetails
+                  {...props}
+                  authenticated={authenticated}
+                  token={jwtDecode(token)}
+                />
               )}
             />
           </Switch>
