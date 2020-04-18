@@ -38,7 +38,8 @@ const Login = ({ authenticated }) => {
         username: formState.username,
         zipCode: formState.zipCode,
       };
-    } else {
+    }
+    if (!signup) {
       userData = {
         email: formState.email,
         password: formState.password,
@@ -63,7 +64,8 @@ const Login = ({ authenticated }) => {
             loading: false,
           });
         });
-    } else {
+    }
+    if (!signup) {
       axios
         .post("/login", userData)
         .then((res) => {
@@ -87,7 +89,9 @@ const Login = ({ authenticated }) => {
   };
 
   useEffect(() => {
-    return authenticated ? (window.location.href = "/events") : null;
+    if (authenticated) {
+      window.location.href = "/events";
+    }
   }, [authenticated]);
 
   const { errors, loading } = formState;
