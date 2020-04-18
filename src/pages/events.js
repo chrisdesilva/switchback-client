@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import moment from "moment";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../components/Loading";
@@ -30,7 +31,7 @@ const Events = ({ authenticated, token }) => {
   let eventsMarkup = events ? (
     events.map((event) => (
       <Link to={`/event/${event.eventId}`} key={event.eventId}>
-        {event.body} - {event.dateTime}
+        {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
       </Link>
     ))
   ) : (
@@ -114,7 +115,8 @@ const Events = ({ authenticated, token }) => {
             placeholder="Enter a date and time to meet"
             onChange={handleChange}
             value={formState.dateTime}
-            type="text"
+            type="date"
+            min={`${moment().format("YYYY-MM-DD")}`}
           />
           <input className="btn btn--primary" type="submit" value="Add event" />
         </NewEvent>

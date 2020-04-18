@@ -97,9 +97,9 @@ const Login = ({ authenticated }) => {
   ) : (
     <AnimatePresence>
       <LoginForm
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         onSubmit={handleSubmit}
       >
         <img src="./sb-lightgreen.png" alt="Switchback logo" />
@@ -133,9 +133,9 @@ const Login = ({ authenticated }) => {
   ) : (
     <AnimatePresence>
       <SignupForm
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         onSubmit={handleSubmit}
       >
         <img src="./sb-darkgreen.png" alt="Switchback logo" />

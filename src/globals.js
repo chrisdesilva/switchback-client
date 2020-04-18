@@ -17,6 +17,7 @@ body {
   input[type="text"],
   input[type="email"],
   input[type="password"],
+  input[type="date"],
   textarea {
     border: none;
     border-bottom: 2px solid #c4c4c4;
