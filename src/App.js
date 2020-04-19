@@ -10,7 +10,7 @@ import EventDetails from "./pages/eventDetails";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 
-let authenticated;
+let authenticated = false;
 const token = localStorage.Token;
 axios.defaults.baseURL =
   "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
@@ -20,7 +20,6 @@ if (token) {
   if (decodedToken.exp * 1000 < Date.now()) {
     window.location.href = "/login";
     authenticated = false;
-    localStorage.clear();
   } else {
     axios.defaults.headers.common["Authorization"] = token;
     authenticated = true;
@@ -55,11 +54,7 @@ function App() {
             <Route
               path="/event/:eventId"
               render={(props) => (
-                <EventDetails
-                  {...props}
-                  authenticated={authenticated}
-                  token={jwtDecode(token)}
-                />
+                <EventDetails {...props} authenticated={authenticated} />
               )}
             />
           </Switch>

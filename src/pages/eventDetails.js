@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import moment from "moment";
 import styled from "styled-components";
+import { FaTrashAlt } from "react-icons/fa";
 import Loading from "../components/Loading";
+import AddComment from "../components/AddComment";
 
-const EventDetails = ({ match, token }) => {
+const EventDetails = ({ match, token, authenticated }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState(null);
@@ -12,7 +15,6 @@ const EventDetails = ({ match, token }) => {
     axios
       .get(match.url)
       .then((res) => {
-        console.log(res.data, token);
         setDetails(res.data);
         setLoading(false);
       })
@@ -20,7 +22,36 @@ const EventDetails = ({ match, token }) => {
         console.error(err);
         setLoading(false);
       });
-  }, [match]);
+  }, [match.url]);
+
+  const handleDeleteComment = (commentId) => {
+    setDetails({
+      ...details,
+      comments: details.comments.filter(
+        (comment) => comment.commentId !== commentId
+      ),
+    });
+    axios
+      .delete(`/comment/${commentId}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handleDeleteEvent = () => {
+    axios
+      .delete(`/event/${match.params.eventId}`)
+      .then((res) => {
+        window.location.href = "/events";
+      })
+      .catch((err) => {
+        console.error(err);
+        setErrors(err.response.data);
+      });
+  };
 
   let comments =
     details && details.comments.length && !loading ? (
@@ -33,7 +64,12 @@ const EventDetails = ({ match, token }) => {
               alt={comment.userImage}
               style={{ maxWidth: "5rem" }}
             />
-            <p>{comment.userHandle}</p>
+            <p>{comment.username}</p>
+            {authenticated && (
+              <FaTrashAlt
+                onClick={() => handleDeleteComment(comment.commentId)}
+              />
+            )}
           </div>
         ))}
       </>
@@ -41,27 +77,13 @@ const EventDetails = ({ match, token }) => {
       <p>Sure is quiet...</p>
     );
 
-  const handleDelete = (e) => {
-    e.preventDefault();
-    axios
-      .delete(`/event/${match.params.eventId}`)
-      .then((res) => {
-        console.log(res);
-        window.location.href = "/events";
-      })
-      .catch((err) => {
-        console.error(err);
-        setErrors(err.response.data);
-      });
-  };
-
   let detailBody = details && (
     <>
       <h1>{details.startingLocation}</h1>
-      <h2>{details.dateTime}</h2>
+      <h2>{moment(details.dateTime).format("MMMM Do, YYYY")}</h2>
       <p>{details.body}</p>
-      {details.userId === token.user_id ? (
-        <button className="btn btn--secondary" onClick={handleDelete}>
+      {token && details.userId === token.user_id ? (
+        <button className="btn btn--secondary" onClick={handleDeleteEvent}>
           Delete Event
         </button>
       ) : null}
@@ -76,8 +98,15 @@ const EventDetails = ({ match, token }) => {
       ) : (
         <>
           {detailBody}
+          {authenticated && (
+            <AddComment
+              match={match}
+              details={details}
+              setDetails={setDetails}
+            />
+          )}
           <h2>Comments</h2>
-          {comments}
+          <div id="comments">{comments}</div>
         </>
       )}
     </Container>
@@ -87,5 +116,8 @@ const EventDetails = ({ match, token }) => {
 export default EventDetails;
 
 const Container = styled.div`
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 `;

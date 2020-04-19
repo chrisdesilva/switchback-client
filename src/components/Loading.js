@@ -1,16 +1,18 @@
 import React from "react";
 import { css } from "@emotion/core";
-import CircleLoader from "react-spinners/CircleLoader";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 const override = css`
-  display: block;
-  margin: 0 auto;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
 `;
 
 const Loading = ({ loading, size, color }) => {
   return (
     <div className="sweet-loading">
-      <CircleLoader
+      <PacmanLoader
         css={override}
         size={size}
         color={color}
