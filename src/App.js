@@ -18,7 +18,6 @@ axios.defaults.baseURL =
 if (token) {
   const decodedToken = jwtDecode(token);
   if (decodedToken.exp * 1000 < Date.now()) {
-    window.location.href = "/";
     authenticated = false;
   } else {
     axios.defaults.headers.common["Authorization"] = token;
