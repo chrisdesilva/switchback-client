@@ -41,6 +41,7 @@ function App() {
               )}
             />
             <Route
+              exact
               path="/events"
               render={(props) => (
                 <Events
@@ -51,6 +52,7 @@ function App() {
               )}
             />
             <Route
+              exact
               path="/event/:eventId"
               render={(props) => (
                 <EventDetails {...props} authenticated={authenticated} />
