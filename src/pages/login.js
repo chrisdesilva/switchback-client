@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled, { css } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import Events from "./events";
 
-const Login = ({ authenticated }) => {
+const Login = () => {
   const [signup, setSignup] = useState(true);
+  const [authenticated, setAuthenicated] = useState(false);
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -54,7 +56,7 @@ const Login = ({ authenticated }) => {
             ...formState,
             loading: false,
           });
-          window.location.href = "/events";
+          setAuthenicated(true);
         })
         .catch((err) => {
           console.error(err.response.data);
@@ -75,7 +77,7 @@ const Login = ({ authenticated }) => {
             ...formState,
             loading: false,
           });
-          window.location.href = "/events";
+          setAuthenicated(true);
         })
         .catch((err) => {
           console.error(err);
@@ -88,11 +90,11 @@ const Login = ({ authenticated }) => {
     }
   };
 
-  useEffect(() => {
-    if (authenticated) {
-      window.location.href = "/events";
-    }
-  }, [authenticated]);
+  // useEffect(() => {
+  //   if (authenticated) {
+  //     window.location.href = "/events";
+  //   }
+  // }, [authenticated]);
 
   const { errors, loading } = formState;
 
@@ -201,7 +203,17 @@ const Login = ({ authenticated }) => {
     </AnimatePresence>
   );
 
-  return <Container>{signup ? signupForm : loginForm}</Container>;
+  return (
+    <Container>
+      {authenticated ? (
+        <Events authenticated={authenticated} />
+      ) : signup ? (
+        signupForm
+      ) : (
+        loginForm
+      )}
+    </Container>
+  );
 };
 
 export default Login;
