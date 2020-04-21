@@ -11,30 +11,14 @@ const Navbar = ({ authenticated }) => {
   return (
     <Container>
       <Nav>
-        {authenticated ? (
-          <>
-            <Link to="/events">
-              {" "}
-              <img src="./mtn-white.png" alt="Switchback logo" />
-            </Link>
-            <div>
-              <Link to="/events">Events</Link>
-              <button className="navButton" onClick={handleSignout}>
-                Sign Out
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <Link to="/">
-              <img src="./mtn-white.png" alt="Switchback logo" />
-            </Link>
-            <div>
-              <Link to="/events">Events</Link>
-              <Link to="/">Login/Signup</Link>
-            </div>
-          </>
-        )}
+        <Link to="/">
+          {" "}
+          <img src="./mtn-white.png" alt="Switchback logo" />
+        </Link>
+        <div>
+          <Link to="/login">Login</Link>
+          <Link to="/signup">Signup</Link>
+        </div>
       </Nav>
     </Container>
   );

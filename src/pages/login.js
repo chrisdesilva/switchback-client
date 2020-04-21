@@ -1,21 +1,42 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
-import Events from "./events";
+import { Link } from "react-router-dom";
 
-const Login = () => {
-  const [signup, setSignup] = useState(true);
-  const [authenticated, setAuthenicated] = useState(false);
+import { connect } from "react-redux";
+import { loginUser } from "../redux/actions/userActions";
+
+const Login = (props) => {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
-    username: "",
     loading: false,
-    zipCode: "",
     errors: {},
   });
+
+  useEffect(() => {
+    if (props.UI.errors) {
+      setFormState({
+        ...formState,
+        errors: props.UI.errors,
+      });
+    }
+  }, [props.UI.errors]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormState({
+      ...formState,
+      loading: true,
+    });
+    const userData = {
+      email: formState.email,
+      password: formState.password,
+    };
+
+    props.loginUser(userData, props.history);
+  };
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -25,198 +46,69 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormState({
-      ...formState,
-      loading: true,
-    });
-    let userData;
-    if (signup) {
-      userData = {
-        email: formState.email,
-        password: formState.password,
-        confirmPassword: formState.confirmPassword,
-        username: formState.username,
-        zipCode: formState.zipCode,
-      };
-    }
-    if (!signup) {
-      userData = {
-        email: formState.email,
-        password: formState.password,
-      };
-    }
-    if (signup) {
-      axios
-        .post("/signup", userData)
-        .then((res) => {
-          localStorage.setItem("Token", `Bearer ${res.data.token}`);
-          setFormState({
-            ...formState,
-            loading: false,
-          });
-          setAuthenicated(true);
-        })
-        .catch((err) => {
-          console.error(err.response.data);
-          setFormState({
-            ...formState,
-            errors: err.response.data,
-            loading: false,
-          });
-        });
-    }
-    if (!signup) {
-      axios
-        .post("/login", userData)
-        .then((res) => {
-          localStorage.setItem("Token", `Bearer ${res.data.token}`);
-          console.log(res.data);
-          setFormState({
-            ...formState,
-            loading: false,
-          });
-          setAuthenicated(true);
-        })
-        .catch((err) => {
-          console.error(err);
-          setFormState({
-            ...formState,
-            errors: err.response.data,
-            loading: false,
-          });
-        });
-    }
-  };
-
-  // useEffect(() => {
-  //   if (authenticated) {
-  //     window.location.href = "/events";
-  //   }
-  // }, [authenticated]);
-
-  const { errors, loading } = formState;
-
-  let loginForm = loading ? (
-    <p>Loading...</p>
-  ) : (
-    <AnimatePresence>
-      <LoginForm
-        exit={{ opacity: 0, x: 50 }}
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        onSubmit={handleSubmit}
-      >
-        <img src="./sb-lightgreen.png" alt="Switchback logo" />
-        <input
-          onChange={handleChange}
-          value={formState.email}
-          name="email"
-          id="email"
-          placeholder="Enter email"
-          type="email"
-        />
-        <input
-          onChange={handleChange}
-          value={formState.password}
-          name="password"
-          id="password"
-          placeholder="Enter password"
-          type="password"
-        />
-        {errors.general && <p>{errors.general}</p>}
-        <input className="btn btn--primary" type="submit" value="Log in" />
-        <p onClick={() => setSignup(true)}>
-          New here? Click here to create an account.
-        </p>
-      </LoginForm>
-    </AnimatePresence>
-  );
-
-  let signupForm = loading ? (
-    <p>Loading...</p>
-  ) : (
-    <AnimatePresence>
-      <SignupForm
-        exit={{ opacity: 0, x: -50 }}
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        onSubmit={handleSubmit}
-      >
-        <img src="./sb-darkgreen.png" alt="Switchback logo" />
-        <input
-          onChange={handleChange}
-          value={formState.email}
-          name="email"
-          id="email"
-          placeholder="Enter email"
-          type="email"
-          className="input"
-        />
-        {errors.email && <p>{errors.email}</p>}
-        <input
-          onChange={handleChange}
-          value={formState.password}
-          name="password"
-          id="password"
-          placeholder="Enter password"
-          type="password"
-          className="input"
-        />
-        {errors.password && <p>{errors.password}</p>}
-        <input
-          onChange={handleChange}
-          value={formState.confirmPassword}
-          name="confirmPassword"
-          id="confirmPassword"
-          placeholder="Confirm password"
-          type="password"
-          className="input"
-        />
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <input
-          onChange={handleChange}
-          value={formState.username}
-          name="username"
-          id="username"
-          placeholder="Enter username"
-          type="text"
-          className="input"
-        />
-        {errors.username && <p>{errors.username}</p>}
-        <input
-          onChange={handleChange}
-          value={formState.zipCode}
-          name="zipCode"
-          id="zipCode"
-          placeholder="Enter zip code"
-          type="text"
-          className="input"
-        />
-        {errors.zipCode && <p>{errors.zipCode}</p>}
-        <input type="submit" value="Sign Up" className="btn btn--primary" />
-        <p onClick={() => setSignup(false)}>
-          Already have an account? Click here to sign in.
-        </p>
-      </SignupForm>
-    </AnimatePresence>
-  );
+  const {
+    UI: { loading },
+  } = props;
+  const { errors, password, email } = formState;
 
   return (
-    <Container>
-      {authenticated ? (
-        <Events authenticated={authenticated} />
-      ) : signup ? (
-        signupForm
-      ) : (
-        loginForm
-      )}
-    </Container>
+    <AnimatePresence>
+      <Container>
+        <LoginForm
+          exit={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          onSubmit={handleSubmit}
+        >
+          <img src="./sb-lightgreen.png" alt="Switchback logo" />
+          <input
+            onChange={handleChange}
+            value={email}
+            name="email"
+            id="email"
+            placeholder="Enter email"
+            type="email"
+          />
+          <input
+            onChange={handleChange}
+            value={password}
+            name="password"
+            id="password"
+            placeholder="Enter password"
+            type="password"
+          />
+          {errors.general && <p>{errors.general}</p>}
+          <input
+            disabled={loading}
+            className="btn btn--primary"
+            type="submit"
+            value="Log in"
+          />
+          <p>
+            New here? Click <Link to="/signup">here</Link> to create an account.
+          </p>
+        </LoginForm>
+      </Container>
+    </AnimatePresence>
   );
 };
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+const mapActionsToProps = {
+  loginUser,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Login);
 
 const Container = styled.div`
   display: flex;
@@ -272,40 +164,5 @@ const LoginForm = styled(motion.form)`
 
   h2 {
     color: #f7f7f7;
-  }
-`;
-
-const SignupForm = styled(motion.form)`
-  ${Form}
-  img {
-    width: 20%;
-    margin: 0 auto;
-    display: block;
-  }
-  background: #f7f7f7;
-
-  p {
-    color: #052524;
-  }
-
-  h2 {
-    color: #052524;
-  }
-
-  .input {
-    color: #052524;
-    border-bottom: 2px solid #052524;
-  }
-
-  .btn {
-    background: #30da8a;
-    color: #111;
-    border: 2px solid #052524;
-    transition: color 300ms, background 300ms;
-
-    :hover {
-      background: #111;
-      color: #30da8a;
-    }
   }
 `;

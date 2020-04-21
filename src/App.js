@@ -1,67 +1,53 @@
 import React from "react";
-import "./App.css";
 import styled from "styled-components";
-import { GlobalStyle } from "./globals";
 import jwtDecode from "jwt-decode";
-import Events from "./pages/events";
-import Login from "./pages/login";
-import Navbar from "./components/Navbar";
-import EventDetails from "./pages/eventDetails";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 
-let authenticated = false;
+import "./App.css";
+import { GlobalStyle } from "./globals";
+import AuthRoute from "./components/AuthRoute";
+import home from "./pages/home";
+import login from "./pages/login";
+import signup from "./pages/signup";
+import Navbar from "./components/Navbar";
+
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { SET_AUTHENTICATED } from "./redux/types";
+import { logoutUser, getUserData } from "./redux/actions/userActions";
+
 const token = localStorage.Token;
-axios.defaults.baseURL =
-  "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
 
 if (token) {
   const decodedToken = jwtDecode(token);
   if (decodedToken.exp * 1000 < Date.now()) {
-    authenticated = false;
+    store.dispatch(logoutUser());
+    window.location.href = "/login";
   } else {
+    store.dispatch({ type: SET_AUTHENTICATED });
     axios.defaults.headers.common["Authorization"] = token;
-    authenticated = true;
+    store.dispatch(getUserData());
   }
 }
 
 function App() {
   return (
-    <ParentContainer>
-      <GlobalStyle />
-      <Router>
-        <Navbar authenticated={authenticated} />
-        <ChildContainer>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <Login {...props} authenticated={authenticated} />
-              )}
-            />
-            <Route
-              exact
-              path="/events"
-              render={(props) => (
-                <Events
-                  {...props}
-                  authenticated={authenticated}
-                  token={token}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/event/:eventId"
-              render={(props) => (
-                <EventDetails {...props} authenticated={authenticated} />
-              )}
-            />
-          </Switch>
-        </ChildContainer>
-      </Router>
-    </ParentContainer>
+    <Provider store={store}>
+      <ParentContainer>
+        <GlobalStyle />
+        <Router>
+          <Navbar />
+          <ChildContainer>
+            <Switch>
+              <Route exact path="/" component={home} />
+              <AuthRoute path="/login" component={login} />
+              <AuthRoute path="/signup" component={signup} />
+            </Switch>
+          </ChildContainer>
+        </Router>
+      </ParentContainer>
+    </Provider>
   );
 }
 
