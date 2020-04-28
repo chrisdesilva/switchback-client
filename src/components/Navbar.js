@@ -1,12 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { logoutUser } from "../redux/actions/userActions";
 
-const Navbar = ({ authenticated }) => {
+const Navbar = (props) => {
   const handleSignout = () => {
-    localStorage.removeItem("Token");
-    window.location.href = "/";
+    props.logoutUser();
   };
+
+  const {
+    user: { authenticated },
+  } = props;
+
+  let accountNav = authenticated ? (
+    <div>
+      <button className="navButton" onClick={handleSignout}>
+        Sign out
+      </button>
+    </div>
+  ) : (
+    <div>
+      <Link to="/login">Login</Link>
+      <Link to="/signup">Signup</Link>
+    </div>
+  );
 
   return (
     <Container>
@@ -15,16 +33,17 @@ const Navbar = ({ authenticated }) => {
           {" "}
           <img src="./mtn-white.png" alt="Switchback logo" />
         </Link>
-        <div>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Signup</Link>
-        </div>
+        {accountNav}
       </Nav>
     </Container>
   );
 };
 
-export default Navbar;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, { logoutUser })(Navbar);
 
 const Container = styled.header`
   width: 100vw;

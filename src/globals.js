@@ -25,7 +25,6 @@ body {
     font-family: "PT Sans", sans-serif;
     background: transparent;
     color: #30DA8A;
-    text-transform: uppercase;
   }
 
   .btn {

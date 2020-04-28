@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { getEvents } from "../redux/actions/dataActions";
 import styled from "styled-components";
 import Loading from "../components/Loading";
+import PostEvent from "../components/PostEvent";
 
-const Home = () => {
-  const [events, setEvents] = useState(null);
+const Home = (props) => {
+  const { loading, events } = props.data;
 
   useEffect(() => {
-    axios
-      .get("/events")
-      .then((res) => {
-        setEvents(res.data);
-      })
-      .catch((err) => console.error(err));
+    props.getEvents();
   }, []);
 
-  let eventMarkup = events ? (
+  let eventMarkup = !loading ? (
     events.map((event) => (
       <Link to={`/event/${event.eventId}`} key={event.eventId}>
         {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
@@ -29,6 +26,7 @@ const Home = () => {
 
   return (
     <Container>
+      {props.authenticated && <PostEvent />}
       <EventList>
         <h2>Upcoming Events</h2>
         {eventMarkup}
@@ -37,7 +35,12 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => ({
+  data: state.data,
+  authenticated: state.user.authenticated,
+});
+
+export default connect(mapStateToProps, { getEvents })(Home);
 
 const Container = styled.div`
   background: #052524;
@@ -62,4 +65,5 @@ const Container = styled.div`
 const EventList = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `;

@@ -3,7 +3,7 @@ import { css } from "@emotion/core";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
 const override = css`
-  position: fixed;
+  position: absolute;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;

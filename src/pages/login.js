@@ -26,10 +26,6 @@ const Login = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormState({
-      ...formState,
-      loading: true,
-    });
     const userData = {
       email: formState.email,
       password: formState.password,
