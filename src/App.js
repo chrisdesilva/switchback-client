@@ -16,6 +16,9 @@ import store from "./redux/store";
 import { SET_AUTHENTICATED } from "./redux/types";
 import { getUserData } from "./redux/actions/userActions";
 
+axios.defaults.baseURL =
+  "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
+
 const token = localStorage.FBIdToken;
 
 if (token) {
