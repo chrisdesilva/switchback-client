@@ -5,11 +5,13 @@ import axios from "axios";
 
 import "./App.css";
 import { GlobalStyle } from "./globals";
+
 import AuthRoute from "./components/AuthRoute";
+import Navbar from "./components/Navbar";
 import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
-import Navbar from "./components/Navbar";
+import eventDetails from "./pages/eventDetails";
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -39,6 +41,7 @@ function App() {
               <Route exact path="/" component={home} />
               <AuthRoute path="/login" component={login} />
               <AuthRoute path="/signup" component={signup} />
+              <Route exact path="/event/:eventId" component={eventDetails} />
             </Switch>
           </ChildContainer>
         </Router>

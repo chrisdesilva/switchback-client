@@ -5,6 +5,8 @@ import {
   SET_ERRORS,
   LOADING_DATA,
   SET_EVENTS,
+  SET_EVENT,
+  STOP_LOADING_UI,
 } from "../types";
 import axios from "axios";
 
@@ -21,6 +23,17 @@ export const getEvents = () => (dispatch) => {
         payload: [],
       });
     });
+};
+
+export const getEvent = (eventId) => (dispatch) => {
+  dispatch({ type: LOADING_UI });
+  axios
+    .get(`/event/${eventId}`)
+    .then((res) => {
+      dispatch({ type: SET_EVENT, payload: res.data });
+      dispatch({ type: STOP_LOADING_UI });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const postEvent = (eventData) => (dispatch) => {

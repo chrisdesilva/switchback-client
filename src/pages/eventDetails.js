@@ -6,88 +6,25 @@ import { FaTrashAlt } from "react-icons/fa";
 import Loading from "../components/Loading";
 import AddComment from "../components/AddComment";
 
-const EventDetails = ({ match, token, authenticated }) => {
-  const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState(null);
+import { connect } from "react-redux";
+import { getEvent } from "../redux/actions/dataActions";
+
+const EventDetails = (props) => {
+  const {
+    UI: { loading, errors },
+    event,
+  } = props;
 
   useEffect(() => {
-    axios
-      .get(match.url)
-      .then((res) => {
-        setDetails(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [match.url]);
+    props.getEvent(props.match.params.eventId);
+  }, []);
 
-  const handleDeleteComment = (commentId) => {
-    setDetails({
-      ...details,
-      comments: details.comments.filter(
-        (comment) => comment.commentId !== commentId
-      ),
-    });
-    axios
-      .delete(`/comment/${commentId}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const handleDeleteEvent = () => {
-    axios
-      .delete(`/event/${match.params.eventId}`)
-      .then((res) => {
-        window.location.href = "/events";
-      })
-      .catch((err) => {
-        console.error(err);
-        setErrors(err.response.data);
-      });
-  };
-
-  let comments =
-    details && details.comments.length && !loading ? (
-      <>
-        {details.comments.map((comment) => (
-          <div key={comment.createdAt}>
-            <p>{comment.body}</p>
-            <img
-              src={comment.userImage}
-              alt={comment.userImage}
-              style={{ maxWidth: "5rem" }}
-            />
-            <p>{comment.username}</p>
-            {authenticated && (
-              <FaTrashAlt
-                onClick={() => handleDeleteComment(comment.commentId)}
-              />
-            )}
-          </div>
-        ))}
-      </>
-    ) : (
-      <p>Sure is quiet...</p>
-    );
-
-  let detailBody = details && (
+  let detailBody = event && (
     <>
-      <h1>{details.startingLocation}</h1>
-      <h2>{moment(details.dateTime).format("MMMM Do, YYYY")}</h2>
-      <p>{details.body}</p>
-      {token && details.userId === token.user_id ? (
-        <button className="btn btn--secondary" onClick={handleDeleteEvent}>
-          Delete Event
-        </button>
-      ) : null}
-      {errors && <p>{errors.error}</p>}
+      <h1>{event.startingLocation}</h1>
+      <h2>{moment(event.dateTime).format("MMMM Do, YYYY")}</h2>
+      <p>{event.body}</p>
+      {errors && <small>{errors.error}</small>}
     </>
   );
 
@@ -96,24 +33,19 @@ const EventDetails = ({ match, token, authenticated }) => {
       {loading ? (
         <Loading loading={loading} color={"#f7f7f7"} size={100} />
       ) : (
-        <>
-          {detailBody}
-          {authenticated && (
-            <AddComment
-              match={match}
-              details={details}
-              setDetails={setDetails}
-            />
-          )}
-          <h2>Comments</h2>
-          <div id="comments">{comments}</div>
-        </>
+        <>{detailBody}</>
       )}
     </Container>
   );
 };
 
-export default EventDetails;
+const mapStateToProps = (state) => ({
+  authenticated: state.user.authenticated,
+  UI: state.UI,
+  event: state.data.event,
+});
+
+export default connect(mapStateToProps, { getEvent })(EventDetails);
 
 const Container = styled.div`
   display: flex;
