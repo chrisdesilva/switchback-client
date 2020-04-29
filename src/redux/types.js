@@ -12,4 +12,5 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const POST_EVENT = "POST_EVENT";
 export const SET_EVENTS = "SET_EVENTS";
 export const SET_EVENT = "SET_EVENT";
+export const DELETE_EVENT = "DELETE_EVENT";
 export const LOADING_DATA = "LOADING_DATA";

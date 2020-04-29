@@ -1,32 +1,50 @@
 import React, { useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { getEvents } from "../redux/actions/dataActions";
 import styled from "styled-components";
+
 import Loading from "../components/Loading";
 import PostEvent from "../components/PostEvent";
 
+import { connect } from "react-redux";
+import { getEvents, deleteEvent } from "../redux/actions/dataActions";
+
 const Home = (props) => {
-  const { loading, events } = props.data;
+  const {
+    data: { loading, events },
+    authenticated,
+    username,
+  } = props;
 
   useEffect(() => {
     props.getEvents();
   }, []);
 
-  let eventMarkup = !loading ? (
-    events.map((event) => (
-      <Link to={`/event/${event.eventId}`} key={event.eventId}>
-        {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
-      </Link>
-    ))
-  ) : (
+  let eventMarkup = loading ? (
     <Loading size={50} color={"#f7f7f7"} />
+  ) : events.length === 0 ? (
+    <p>No events here...</p>
+  ) : (
+    events.map((event) => (
+      <div key={event.eventId}>
+        <Link to={`/event/${event.eventId}`}>
+          {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
+        </Link>
+        {username === event.username && (
+          <button
+            onClick={() => props.deleteEvent(event.eventId)}
+            className="btn"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+    ))
   );
 
   return (
     <Container>
-      {props.authenticated && <PostEvent />}
+      {authenticated && <PostEvent />}
       <EventList>
         <h2>Upcoming Events</h2>
         {eventMarkup}
@@ -38,9 +56,10 @@ const Home = (props) => {
 const mapStateToProps = (state) => ({
   data: state.data,
   authenticated: state.user.authenticated,
+  username: state.user.credentials.username,
 });
 
-export default connect(mapStateToProps, { getEvents })(Home);
+export default connect(mapStateToProps, { getEvents, deleteEvent })(Home);
 
 const Container = styled.div`
   background: #052524;
@@ -66,4 +85,15 @@ const EventList = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  align-items: center;
+
+  .btn {
+    display: block;
+    margin: 0.5rem auto 1rem auto;
+    transition: background 300ms;
+
+    :hover {
+      background: red;
+    }
+  }
 `;

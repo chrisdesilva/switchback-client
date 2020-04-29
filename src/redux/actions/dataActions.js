@@ -6,6 +6,7 @@ import {
   LOADING_DATA,
   SET_EVENTS,
   SET_EVENT,
+  DELETE_EVENT,
   STOP_LOADING_UI,
 } from "../types";
 import axios from "axios";
@@ -47,6 +48,15 @@ export const postEvent = (eventData) => (dispatch) => {
     .catch((err) => {
       dispatch({ type: SET_ERRORS, payload: err.response.data });
     });
+};
+
+export const deleteEvent = (eventId) => (dispatch) => {
+  axios
+    .delete(`/event/${eventId}`)
+    .then((res) => {
+      dispatch({ type: DELETE_EVENT, payload: eventId });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const clearErrors = () => (dispatch) => {

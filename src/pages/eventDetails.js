@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import moment from "moment";
 import styled from "styled-components";
-import { FaTrashAlt } from "react-icons/fa";
+
 import Loading from "../components/Loading";
-import AddComment from "../components/AddComment";
 
 import { connect } from "react-redux";
-import { getEvent } from "../redux/actions/dataActions";
+import { getEvent, deleteEvent } from "../redux/actions/dataActions";
 
 const EventDetails = (props) => {
   const {
@@ -45,7 +43,9 @@ const mapStateToProps = (state) => ({
   event: state.data.event,
 });
 
-export default connect(mapStateToProps, { getEvent })(EventDetails);
+const mapActionsToProps = { getEvent, deleteEvent };
+
+export default connect(mapStateToProps, mapActionsToProps)(EventDetails);
 
 const Container = styled.div`
   display: flex;

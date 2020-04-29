@@ -1,4 +1,10 @@
-import { POST_EVENT, LOADING_DATA, SET_EVENTS, SET_EVENT } from "../types";
+import {
+  POST_EVENT,
+  LOADING_DATA,
+  SET_EVENTS,
+  SET_EVENT,
+  DELETE_EVENT,
+} from "../types";
 
 const initialState = {
   events: [],
@@ -23,6 +29,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         event: action.payload,
+      };
+    case DELETE_EVENT:
+      const index = state.events.findIndex(
+        (event) => event.eventId === action.payload
+      );
+      state.events.splice(index, 1);
+      return {
+        ...state,
       };
     case POST_EVENT:
       return {
