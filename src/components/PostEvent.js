@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { postEvent, clearErrors } from "../redux/actions/dataActions";
@@ -51,7 +52,20 @@ const PostEvent = (props) => {
   return (
     <Form onSubmit={handleSubmit}>
       <h2>Add New Event</h2>
-      <label htmlFor="body">Description</label>
+      <label htmlFor="body">
+        Description &nbsp;
+        {postErrors.body && (
+          <AnimatePresence>
+            <small
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {postErrors.body}
+            </small>
+          </AnimatePresence>
+        )}
+      </label>
       <input
         name="body"
         type="text"
@@ -60,8 +74,21 @@ const PostEvent = (props) => {
         onChange={handleChange}
         id="body"
       />
-      {postErrors.body && <small>{postErrors.body}</small>}
-      <label htmlFor="dateTime">Date & Time</label>
+
+      <label htmlFor="dateTime">
+        Date & Time&nbsp;
+        {postErrors.dateTime && (
+          <AnimatePresence>
+            <small
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {postErrors.dateTime}
+            </small>
+          </AnimatePresence>
+        )}
+      </label>
       <input
         name="dateTime"
         type="date"
@@ -70,8 +97,20 @@ const PostEvent = (props) => {
         onChange={handleChange}
         id="dateTime"
       />
-      {postErrors.dateTime && <small>{postErrors.dateTime}</small>}
-      <label htmlFor="address">Address</label>
+      <label htmlFor="address">
+        Address&nbsp;
+        {postErrors.address && (
+          <AnimatePresence>
+            <small
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {postErrors.address}
+            </small>
+          </AnimatePresence>
+        )}
+      </label>
       <input
         name="address"
         type="text"
@@ -80,8 +119,20 @@ const PostEvent = (props) => {
         onChange={handleChange}
         id="address"
       />
-      {postErrors.address && <small>{postErrors.address}</small>}
-      <label htmlFor="startingLocation">Starting Location</label>
+      <label htmlFor="startingLocation">
+        Starting Location&nbsp;
+        {postErrors.startingLocation && (
+          <AnimatePresence>
+            <small
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {postErrors.startingLocation}
+            </small>
+          </AnimatePresence>
+        )}
+      </label>
       <input
         name="startingLocation"
         type="text"
@@ -90,9 +141,6 @@ const PostEvent = (props) => {
         onChange={handleChange}
         id="startingLocation"
       />
-      {postErrors.startingLocation && (
-        <small>{postErrors.startingLocation}</small>
-      )}
       <button disabled={loading} type="submit" className="btn btn--primary">
         Add Event {loading && <Loading color="#0d0d0d" size={8} />}
       </button>
@@ -122,6 +170,7 @@ const Form = styled.form`
   small {
     text-align: center;
     color: red;
+    margin-bottom: 1rem;
   }
 
   h2 {
