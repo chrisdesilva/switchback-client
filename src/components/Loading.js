@@ -1,6 +1,6 @@
 import React from "react";
 import { css } from "@emotion/core";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const override = css`
   position: absolute;
@@ -12,12 +12,7 @@ const override = css`
 const Loading = ({ loading, size, color }) => {
   return (
     <div className="sweet-loading">
-      <PacmanLoader
-        css={override}
-        size={size}
-        color={color}
-        loading={loading}
-      />
+      <BeatLoader css={override} size={size} color={color} loading={loading} />
     </div>
   );
 };

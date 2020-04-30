@@ -33,6 +33,7 @@ body {
     padding: .5rem 1rem;
     width: 10rem;
     text-transform: uppercase;
+    height: 38px;
   }
 
   .btn--primary {

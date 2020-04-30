@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
+import Loading from "../components/Loading";
+
+import { connect } from "react-redux";
+import { signupUser } from "../redux/actions/userActions";
 
 const Signup = (props) => {
   const [formState, setFormState] = useState({
@@ -14,6 +18,18 @@ const Signup = (props) => {
     zipCode: "",
     errors: {},
   });
+
+  const {
+    UI: { loading },
+  } = props;
+  const {
+    errors,
+    password,
+    email,
+    confirmPassword,
+    username,
+    zipCode,
+  } = formState;
 
   useEffect(() => {
     if (props.UI.errors) {
@@ -48,18 +64,6 @@ const Signup = (props) => {
     });
   };
 
-  const {
-    UI: { loading },
-  } = props;
-  const {
-    errors,
-    password,
-    email,
-    confirmPassword,
-    username,
-    zipCode,
-  } = formState;
-
   return (
     <AnimatePresence>
       <Container>
@@ -79,7 +83,7 @@ const Signup = (props) => {
             type="email"
             className="input"
           />
-          {errors.email && <p>{errors.email}</p>}
+          {errors.email && <small>{errors.email}</small>}
           <input
             onChange={handleChange}
             value={password}
@@ -89,7 +93,7 @@ const Signup = (props) => {
             type="password"
             className="input"
           />
-          {errors.password && <p>{errors.password}</p>}
+          {errors.password && <small>{errors.password}</small>}
           <input
             onChange={handleChange}
             value={confirmPassword}
@@ -99,7 +103,7 @@ const Signup = (props) => {
             type="password"
             className="input"
           />
-          {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+          {errors.confirmPassword && <small>{errors.confirmPassword}</small>}
           <input
             onChange={handleChange}
             value={username}
@@ -109,7 +113,7 @@ const Signup = (props) => {
             type="text"
             className="input"
           />
-          {errors.username && <p>{errors.username}</p>}
+          {errors.username && <small>{errors.username}</small>}
           <input
             onChange={handleChange}
             value={zipCode}
@@ -119,13 +123,10 @@ const Signup = (props) => {
             type="text"
             className="input"
           />
-          {errors.zipCode && <p>{errors.zipCode}</p>}
-          <input
-            disabled={loading}
-            type="submit"
-            value="Sign Up"
-            className="btn btn--primary"
-          />
+          {errors.zipCode && <small>{errors.zipCode}</small>}
+          <button disabled={loading} className="btn btn--primary" type="submit">
+            {loading ? <Loading color="#f7f7f7" size={8} /> : "Signup"}
+          </button>
           <p>
             Already have an account? Click <Link to="/login">here</Link> to sign
             in.
@@ -141,7 +142,7 @@ const mapStateToProps = (state) => ({
   UI: state.UI,
 });
 
-export default connect(mapStateToProps)(Signup);
+export default connect(mapStateToProps, { signupUser })(Signup);
 
 const Container = styled.div`
   display: flex;
@@ -157,6 +158,12 @@ const Form = css`
   width: 60%;
   border-radius: 5px;
   box-shadow: 2px 2px 10px #000;
+
+  small {
+    text-align: center;
+    color: red;
+    display: block;
+  }
 
   p {
     cursor: pointer;
@@ -182,6 +189,7 @@ const Form = css`
   }
 
   .btn {
+    position: relative;
     display: block;
     margin: 1rem auto;
   }

@@ -15,12 +15,14 @@ const Navbar = (props) => {
 
   let accountNav = authenticated ? (
     <div>
+      <Link to="/">All Events</Link>
       <button className="navButton" onClick={handleSignout}>
         Sign out
       </button>
     </div>
   ) : (
     <div>
+      <Link to="/">All Events</Link>
       <Link to="/login">Login</Link>
       <Link to="/signup">Signup</Link>
     </div>

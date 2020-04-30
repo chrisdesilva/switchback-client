@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
+import Loading from "../components/Loading";
+
 import { connect } from "react-redux";
 import { loginUser } from "../redux/actions/userActions";
 
@@ -15,14 +17,18 @@ const Login = (props) => {
     errors: {},
   });
 
+  const {
+    UI: { loading, errors },
+  } = props;
+
   useEffect(() => {
-    if (props.UI.errors) {
+    if (errors) {
       setFormState({
         ...formState,
-        errors: props.UI.errors,
+        errors,
       });
     }
-  }, [props.UI.errors]);
+  }, [errors]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,10 +48,7 @@ const Login = (props) => {
     });
   };
 
-  const {
-    UI: { loading },
-  } = props;
-  const { errors, password, email } = formState;
+  const { password, email } = formState;
 
   return (
     <AnimatePresence>
@@ -55,6 +58,7 @@ const Login = (props) => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           onSubmit={handleSubmit}
+          loading={loading}
         >
           <img src="./sb-lightgreen.png" alt="Switchback logo" />
           <input
@@ -73,13 +77,10 @@ const Login = (props) => {
             placeholder="Enter password"
             type="password"
           />
-          {errors.general && <p>{errors.general}</p>}
-          <input
-            disabled={loading}
-            className="btn btn--primary"
-            type="submit"
-            value="Log in"
-          />
+          {formState.errors.general && <p>{formState.errors.general}</p>}
+          <button disabled={loading} className="btn btn--primary" type="submit">
+            {loading ? <Loading color="#0d0d0d" size={8} /> : "Login"}
+          </button>
           <p>
             New here? Click <Link to="/signup">here</Link> to create an account.
           </p>
@@ -145,6 +146,8 @@ const Form = css`
   }
 
   .btn {
+    color: ${({ loading }) => (loading ? "transparent" : "inherit")};
+    position: relative;
     display: block;
     margin: 1rem auto;
   }

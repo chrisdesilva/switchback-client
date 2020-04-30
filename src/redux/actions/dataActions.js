@@ -8,6 +8,9 @@ import {
   SET_EVENT,
   DELETE_EVENT,
   STOP_LOADING_UI,
+  COMMENT_ON_EVENT,
+  STOP_LOADING_DATA,
+  DELETE_COMMENT,
 } from "../types";
 import axios from "axios";
 
@@ -53,8 +56,32 @@ export const postEvent = (eventData) => (dispatch) => {
 export const deleteEvent = (eventId) => (dispatch) => {
   axios
     .delete(`/event/${eventId}`)
-    .then((res) => {
+    .then(() => {
       dispatch({ type: DELETE_EVENT, payload: eventId });
+    })
+    .catch((err) => console.log(err));
+};
+
+export const commentOnEvent = (eventId, commentData) => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .post(`event/${eventId}/comment`, commentData)
+    .then((res) => {
+      dispatch({ type: COMMENT_ON_EVENT, payload: res.data });
+      dispatch({ type: STOP_LOADING_DATA });
+      dispatch(clearErrors());
+    })
+    .catch((err) => {
+      dispatch({ type: STOP_LOADING_DATA });
+      dispatch({ type: SET_ERRORS, payload: err.response.data });
+    });
+};
+
+export const deleteComment = (commentId) => (dispatch) => {
+  axios
+    .delete(`/comment/${commentId}`)
+    .then(() => {
+      dispatch({ type: DELETE_COMMENT, payload: commentId });
     })
     .catch((err) => console.log(err));
 };

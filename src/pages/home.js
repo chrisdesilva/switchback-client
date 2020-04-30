@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FaTrashAlt } from "react-icons/fa";
 
 import Loading from "../components/Loading";
 import PostEvent from "../components/PostEvent";
@@ -21,22 +22,17 @@ const Home = (props) => {
   }, []);
 
   let eventMarkup = loading ? (
-    <Loading size={50} color={"#f7f7f7"} />
+    <Loading size={20} color={"#f7f7f7"} />
   ) : events.length === 0 ? (
     <p>No events here...</p>
   ) : (
     events.map((event) => (
-      <div key={event.eventId}>
+      <div className="event" key={event.eventId}>
         <Link to={`/event/${event.eventId}`}>
           {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
         </Link>
         {username === event.username && (
-          <button
-            onClick={() => props.deleteEvent(event.eventId)}
-            className="btn"
-          >
-            Delete
-          </button>
+          <FaTrashAlt onClick={() => props.deleteEvent(event.eventId)} />
         )}
       </div>
     ))
@@ -87,13 +83,20 @@ const EventList = styled.div`
   position: relative;
   align-items: center;
 
-  .btn {
-    display: block;
-    margin: 0.5rem auto 1rem auto;
-    transition: background 300ms;
+  .event {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 
-    :hover {
-      background: red;
+    svg {
+      transition: color 300ms;
+      color: #f7f7f7;
+      cursor: pointer;
+      margin-left: 0.5rem;
+
+      :hover {
+        color: red;
+      }
     }
   }
 `;

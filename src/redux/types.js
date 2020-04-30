@@ -14,3 +14,6 @@ export const SET_EVENTS = "SET_EVENTS";
 export const SET_EVENT = "SET_EVENT";
 export const DELETE_EVENT = "DELETE_EVENT";
 export const LOADING_DATA = "LOADING_DATA";
+export const STOP_LOADING_DATA = "STOP_LOADING_DATA";
+export const COMMENT_ON_EVENT = "COMMENT_ON_EVENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
