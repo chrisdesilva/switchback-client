@@ -56,6 +56,7 @@ export default function (state = initialState, action) {
         ...state,
         event: {
           ...state.event,
+          commentCount: state.event.commentCount + 1,
           comments: [action.payload, ...state.event.comments],
         },
       };
@@ -69,6 +70,7 @@ export default function (state = initialState, action) {
         event: {
           ...state.event,
           comments: state.event.comments,
+          commentCount: state.event.commentCount - 1,
         },
       };
     default:

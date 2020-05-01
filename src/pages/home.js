@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaComment, FaCalendarCheck } from "react-icons/fa";
 
 import Loading from "../components/Loading";
 import PostEvent from "../components/PostEvent";
@@ -28,12 +28,26 @@ const Home = (props) => {
   ) : (
     events.map((event) => (
       <div className="event" key={event.eventId}>
-        <Link to={`/event/${event.eventId}`}>
-          {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
-        </Link>
-        {username === event.username && (
-          <FaTrashAlt onClick={() => props.deleteEvent(event.eventId)} />
-        )}
+        <div className="event__title">
+          <Link to={`/event/${event.eventId}`}>
+            {event.body} - {moment(event.dateTime).format("MMMM Do, YYYY")}
+          </Link>
+          {username === event.username && (
+            <FaTrashAlt onClick={() => props.deleteEvent(event.eventId)} />
+          )}
+        </div>
+        <div className="event__interaction">
+          <div>
+            <FaComment />
+            &nbsp;{event.commentCount}&nbsp;
+            {event.commentCount === 1 ? "comment" : "comments"}
+          </div>
+          <div>
+            <FaCalendarCheck />
+            &nbsp;{event.likeCount}&nbsp;
+            {event.likeCount === 1 ? "RSVP" : "RSVPs"}
+          </div>
+        </div>
       </div>
     ))
   );
@@ -85,17 +99,31 @@ const EventList = styled.div`
 
   .event {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 1rem;
+    width: 50%;
+    align-items: center;
 
-    svg {
-      transition: color 300ms;
-      color: #f7f7f7;
-      cursor: pointer;
-      margin-left: 0.5rem;
+    &__title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      svg {
+        transition: color 300ms;
+        color: #f7f7f7;
+        cursor: pointer;
+        margin-left: 0.5rem;
 
-      :hover {
-        color: red;
+        :hover {
+          color: red;
+        }
+      }
+    }
+
+    &__interaction {
+      display: flex;
+      div {
+        margin: 0 1rem;
       }
     }
   }
