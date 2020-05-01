@@ -25,11 +25,6 @@ axios.defaults.baseURL =
 const token = localStorage.FBIdToken;
 
 if (token) {
-  const decodedToken = jwtDecode(token);
-  if (decodedToken.exp * 1000 < Date.now()) {
-    store.dispatch(getUserData());
-    store.dispatch({ type: SET_AUTHENTICATED });
-  }
   store.dispatch({ type: SET_AUTHENTICATED });
   axios.defaults.headers.common["Authorization"] = token;
   store.dispatch(getUserData());
