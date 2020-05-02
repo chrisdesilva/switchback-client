@@ -15,21 +15,13 @@ const Signup = (props) => {
     confirmPassword: "",
     username: "",
     loading: false,
-    zipCode: "",
     errors: {},
   });
 
   const {
     UI: { loading },
   } = props;
-  const {
-    errors,
-    password,
-    email,
-    confirmPassword,
-    username,
-    zipCode,
-  } = formState;
+  const { errors, password, email, confirmPassword, username } = formState;
 
   useEffect(() => {
     if (props.UI.errors) {
@@ -51,7 +43,6 @@ const Signup = (props) => {
       password: formState.password,
       confirmPassword: formState.confirmPassword,
       username: formState.username,
-      zipCode: formState.zipCode,
     };
     props.signupUser(newUserData, props.history);
   };
@@ -114,16 +105,6 @@ const Signup = (props) => {
             className="input"
           />
           {errors.username && <small>{errors.username}</small>}
-          <input
-            onChange={handleChange}
-            value={zipCode}
-            name="zipCode"
-            id="zipCode"
-            placeholder="Enter zip code"
-            type="text"
-            className="input"
-          />
-          {errors.zipCode && <small>{errors.zipCode}</small>}
           <button disabled={loading} className="btn btn--primary" type="submit">
             {loading ? <Loading color="#f7f7f7" size={8} /> : "Signup"}
           </button>

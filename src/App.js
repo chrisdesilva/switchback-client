@@ -13,11 +13,12 @@ import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
 import eventDetails from "./pages/eventDetails";
+import userDetails from "./pages/userDetails";
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { SET_AUTHENTICATED } from "./redux/types";
-import { getUserData } from "./redux/actions/userActions";
+import { getUserData, logoutUser } from "./redux/actions/userActions";
 
 axios.defaults.baseURL =
   "https://us-central1-switchback-d1be7.cloudfunctions.net/api";
@@ -25,6 +26,11 @@ axios.defaults.baseURL =
 const token = localStorage.FBIdToken;
 
 if (token) {
+  const decodedToken = jwtDecode(token);
+  console.log(decodedToken);
+  if (decodedToken.exp * 1000 < Date.now()) {
+    store.dispatch(logoutUser());
+  }
   store.dispatch({ type: SET_AUTHENTICATED });
   axios.defaults.headers.common["Authorization"] = token;
   store.dispatch(getUserData());
@@ -42,6 +48,7 @@ function App() {
               <Route exact path="/" component={home} />
               <AuthRoute path="/login" component={login} />
               <AuthRoute path="/signup" component={signup} />
+              <Route path="/account" component={userDetails} />
               <Route exact path="/event/:eventId" component={eventDetails} />
             </Switch>
           </ChildContainer>

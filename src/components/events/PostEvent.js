@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { postEvent, clearErrors } from "../redux/actions/dataActions";
+import { postEvent, clearErrors } from "../../redux/actions/dataActions";
 import EventForm from "./EventForm";
 
 const PostEvent = (props) => {

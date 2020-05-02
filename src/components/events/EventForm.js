@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
-import Loading from "./Loading";
+import Loading from "../Loading";
 
 const EventForm = (props) => {
   const { handleChange, handleSubmit, formData, postErrors, loading } = props;
@@ -99,7 +99,11 @@ const EventForm = (props) => {
         id="startingLocation"
       />
       <button disabled={loading} type="submit" className="btn btn--primary">
-        {loading ? <Loading color="#0d0d0d" size={8} /> : "Add Event"}
+        {loading ? (
+          <Loading color="#0d0d0d" size={8} loading={loading} />
+        ) : (
+          "Add Event"
+        )}
       </button>
     </Form>
   );

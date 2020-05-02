@@ -66,6 +66,16 @@ export const getUserData = () => (dispatch) => {
     });
 };
 
+export const updateProfileImage = (imageData) => (dispatch) => {
+  dispatch({ type: LOADING_USER });
+  axios
+    .post("/user/image", imageData)
+    .then(() => {
+      dispatch(getUserData()); // post the image then fetch the user data again to display the updated image
+    })
+    .catch((err) => console.log(err));
+};
+
 const setAuthorizationHeader = (token) => {
   const FBIdToken = `Bearer ${token}`;
   localStorage.setItem("FBIdToken", FBIdToken);

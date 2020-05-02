@@ -12,7 +12,7 @@ const override = css`
 const Loading = ({ loading, size, color }) => {
   return (
     <div className="sweet-loading">
-      <BeatLoader css={override} size={size} color={color} loading={loading} />
+      <BeatLoader size={size} color={color} loading={loading} />
     </div>
   );
 };

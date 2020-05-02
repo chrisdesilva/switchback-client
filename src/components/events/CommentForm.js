@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
-import Loading from "../components/Loading";
+import Loading from "../Loading";
 
 const CommentForm = ({
   formErrors,

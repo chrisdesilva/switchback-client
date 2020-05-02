@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { FaTrashAlt, FaComment, FaCalendarCheck } from "react-icons/fa";
 
 import Loading from "../components/Loading";
-import PostEvent from "../components/PostEvent";
+import PostEvent from "../components/events/PostEvent";
 
 import { connect } from "react-redux";
 import { getEvents, deleteEvent } from "../redux/actions/dataActions";

@@ -16,6 +16,7 @@ const Navbar = (props) => {
   let accountNav = authenticated ? (
     <div>
       <Link to="/">All Events</Link>
+      <Link to="/account">My Account</Link>
       <button className="navButton" onClick={handleSignout}>
         Sign out
       </button>

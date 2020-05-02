@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { FaTrashAlt } from "react-icons/fa";
 
 import Loading from "../components/Loading";
-import CommentForm from "../components/CommentForm";
+import CommentForm from "../components/events/CommentForm";
 
 import { connect } from "react-redux";
 import {
